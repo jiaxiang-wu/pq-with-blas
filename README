@@ -1,0 +1,2 @@
+This repository evaluates the run-time speed of BLAS and SparseBLAS libraries,
+  in the context of Product Quantization applications.
