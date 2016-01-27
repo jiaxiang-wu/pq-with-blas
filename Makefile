@@ -3,7 +3,7 @@ SRCS=$(wildcard *.cc)
 DEPS=$(patsubst %.cc, %.d, $(SRCS))
 OBJS=$(patsubst %.cc, %.o, $(SRCS))
 CFLAGS_OPENBLAS=-I./OpenBLAS-build/include
-CFLAGS=-Wall -std=c++11 -O2 $(CFLAGS_OPENBLAS)
+CFLAGS=-Wall -O2 $(CFLAGS_OPENBLAS)
 LIBS_OPENBLAS=-L./OpenBLAS-build/lib -pthread -lopenblas
 LIBS=$(LIBS_OPENBLAS)
 DFLAGS=

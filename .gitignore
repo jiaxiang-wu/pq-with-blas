@@ -3,3 +3,8 @@ OpenBLAS/*
 OpenBLAS-build/*
 SparseBLAS/*
 
+# C++ objective executive files
+*.d
+*.o
+PQwithBLAS
+
