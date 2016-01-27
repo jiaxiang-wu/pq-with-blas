@@ -1,2 +1,15 @@
-This repository evaluates the run-time speed of BLAS and SparseBLAS libraries,
-  in the context of Product Quantization applications.
+This project evaluates the run-time speed of BLAS and SparseBLAS libraries, in
+  the context of Product Quantization (and its variants).
+
+In Product Quantization (and its variants), the pre-computation stage involves
+  the pre-computation of inner product with each codeword in the codebooks. This
+  can be accelerated by the BLAS library, since it is intrinsically a matrix
+  multiplication.
+
+In Sparse Composite Quantization, the pre-computation is accelerated by imposing
+  a sparsity constraint on the codewords. After this, SparseBLAS can be adopted
+  to speed-up the inner product pre-computation.
+
+This project aims at comparing the wall-time consumption of the pre-computation
+  stage in PQ, CKM/OPQ, CQ/AQ, and SCQ. TQ may also be included in the future.
+
