@@ -73,7 +73,7 @@ void Array<Dtype>::Create(const ArraySiz& siz) {
 
 template<typename Dtype>
 void Array<Dtype>::Delete(void) {
-  siz_.swap(ArraySiz(0));
+  ArraySiz(0).swap(siz_);
   eleCnt_ = 0;
   if (pData_ != NULL) {
     delete[] pData_;

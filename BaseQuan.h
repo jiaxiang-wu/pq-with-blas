@@ -13,13 +13,9 @@
 #include "Array.hpp"
 
 class BaseQuan {
-public:
-  // fill-up essential arrays with random number
-  void Fillup(void);
-  // measure the time consumption of processing a single query
-  void MsrSngTime(void);
-  // measure the time consumption of processing multiple queries
-  void MsrMulTime(void);
+protected:
+  // fill-up the array with random numbers
+  void FillArray(Array<float>& array);
 
 protected:
   // the number of feature dimensions
@@ -34,14 +30,25 @@ protected:
   std::size_t reptCnt_;
 
 protected:
-  // the array containing a single query
-  Array<float> qurySng;
-  // the array containing multiple queries
-  Array<float> quryMul;
+  // the number of feature dimensions for each sub-codebook
+  std::size_t featCntPerScbk_;
+
+protected:
+  // the list of decomposed sub-queries (single)
+  ArraySiz qurySngSiz_;
+  std::vector<Array<float> > qurySng_;
+  // the list of decomposed sub-queries (multiple)
+  ArraySiz quryMulSiz_;
+  std::vector<Array<float> > quryMul_;
   // the list of sub-codebooks
-  std::vector<Array<float> > scbkLst;
-  // the list of pre-computed inner products
-  std::vector<Array<float> > inPdLst;
+  ArraySiz scbkLstSiz_;
+  std::vector<Array<float> > scbkLst_;
+  // the list of pre-computed inner products (single)
+  ArraySiz inPdSngSiz_;
+  std::vector<Array<float> > inPdSng_;
+  // the list of pre-computed inner products (multiple)
+  ArraySiz inPdMulSiz_;
+  std::vector<Array<float> > inPdMul_;
 };
 
 #endif // BASEQUAN_H_INCLUDED
