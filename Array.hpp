@@ -30,12 +30,17 @@ public:
   // create an N-dimensional array
   void Create(const ArraySiz& siz) {
     siz_ = siz;
-    pData_ = new Dtype[GetEleCnt()];
+    eleCnt_ = 1;
+    for (std::size_t idx = 0; idx < siz_.size(); ++idx) {
+      eleCnt_ *= siz_[idx];
+    } // ENDFOR: idx
+    pData_ = new Dtype[eleCnt_];
   }
 
   // destroy the array
   void Destroy(void) {
     siz_.swap(ArraySiz(0));
+    eleCnt_ = 0;
     if (pData_ != NULL) {
       delete[] pData_;
       pData_ = NULL;
@@ -59,28 +64,17 @@ public:
 
   // obtain the pointer stepsize of the x-th dimension
   std::size_t GetDimStp(const std::size_t idx) const {
-    if (idx == siz_.size() - 1) {
-      return 1;
-    } else {
-      return siz_[idx + 1] * GetDimStp(idx + 1);
-    } // ENDIF: idx
+    return (idx == siz_.size() - 1) ? 1 : siz_[idx + 1] * GetDimStp(idx + 1);
   }
 
   // obtain the total number of elements
   std::size_t GetEleCnt(void) const {
-    return GetEleCnt(siz_);
-  }
-  std::size_t GetEleCnt(const ArraySiz& siz) const {
-    std::size_t eleCnt = 1;
-    for (std::size_t idx = 0; idx < siz.size(); ++idx) {
-      eleCnt *= siz[idx];
-    } // ENDFOR: idx
-    return eleCnt;
+    return eleCnt_;
   }
 
   // resize the N-dimensional array
   void Resize(const ArraySiz& siz) {
-    if (GetEleCnt() != GetEleCnt(siz)) { // re-allocation needed
+    if (eleCnt_ != GetEleCnt(siz)) { // re-allocation needed
       Destroy();
       Create(siz);
     } else { // re-allocation not needed
@@ -90,6 +84,7 @@ public:
 
   // display the size information
   void DispSiz(void) const {
+    std::cout << "# of elements: " << eleCnt_ << std::endl;
     for (std::size_t idx = 0; idx < siz_.size(); ++idx) {
       std::cout << "Dim #" << idx + 1 << ": " << siz_[idx] << std::endl;
     } // ENDFOR: idx
@@ -98,6 +93,8 @@ public:
 private:
   // the length of each dimension
   ArraySiz siz_;
+  // the number of elements
+  std::size_t eleCnt_;
   // the data pointer
   Dtype* pData_;
 };
