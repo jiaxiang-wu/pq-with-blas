@@ -13,9 +13,10 @@
 #include "Array.hpp"
 
 class BaseQuan {
-protected:
-  // fill-up the array with random numbers
-  void FillArray(Array<float>& array);
+public:
+  // allocate and fill-up a list of arrays of the same size
+  void AllctAndFill(const std::size_t len, \
+      const ArraySiz& siz, std::vector<Array<float> >& arrays);
 
 protected:
   // the number of feature dimensions

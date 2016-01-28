@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <iomanip>
 
 #include "ProdQuan.h"
 #include "StopWatch.hpp"
@@ -31,15 +32,24 @@ void EvaProdQuan(void) {
   param.quryCnt = kQuryCnt;
   param.reptCnt = kReptCnt;
   prodQuanObj.SetParam(param);
-
-  // evaluate the time consumption under the single/multiple setting
   prodQuanObj.Fillup();
+
+  // evaluate the time consumption of processing a single query
   swSngQury.Start();
   prodQuanObj.MsrSngTime();
-  std::cout << "[INFO] PQ-single  : " << swSngQury.Stop() << " (s)\n";
+  float timeElpsSng = swSngQury.Stop() / kReptCnt;
+
+  // evaluate the time consumption of processing multiple queries
   swMulQury.Start();
   prodQuanObj.MsrMulTime();
-  std::cout << "[INFO] PQ-multiple: " << swMulQury.Stop() << " (s)\n";
+  float timeElpsMul = swMulQury.Stop() / kReptCnt;
+
+  // display the comparison on time comsumption
+  std::cout << std::fixed;
+  std::cout << "[INFO] PQ-single  : " << std::setprecision(3) \
+      << timeElpsSng * 1000 << " ms\n";
+  std::cout << "[INFO] PQ-multiple: " << std::setprecision(3) \
+      << timeElpsMul * 1000 << " ms\n";
 }
 
 int main(int argc, char* argv[]) {

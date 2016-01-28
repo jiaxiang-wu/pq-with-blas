@@ -56,26 +56,11 @@ void ProdQuan::Fillup(void) {
   inPdMulSiz_[1] = quryCnt_;
 
   // fill-up the above arrays with random numbers
-  qurySng_.resize(scbkCnt_);
-  quryMul_.resize(scbkCnt_);
-  scbkLst_.resize(scbkCnt_);
-  inPdSng_.resize(scbkCnt_);
-  inPdMul_.resize(scbkCnt_);
-  for (std::size_t scbkIdx = 0; scbkIdx < scbkCnt_; ++scbkIdx) {
-    // allocate memory for arrays
-    qurySng_[scbkIdx].Create(qurySngSiz_);
-    quryMul_[scbkIdx].Create(quryMulSiz_);
-    scbkLst_[scbkIdx].Create(scbkLstSiz_);
-    inPdSng_[scbkIdx].Create(inPdSngSiz_);
-    inPdMul_[scbkIdx].Create(inPdMulSiz_);
-
-    // fill-up arrays with random numbers
-    this->FillArray(qurySng_[scbkIdx]);
-    this->FillArray(quryMul_[scbkIdx]);
-    this->FillArray(scbkLst_[scbkIdx]);
-    this->FillArray(inPdSng_[scbkIdx]);
-    this->FillArray(inPdMul_[scbkIdx]);
-  } // ENDFOR: scbkIdx
+  AllctAndFill(scbkCnt_, qurySngSiz_, qurySng_);
+  AllctAndFill(scbkCnt_, quryMulSiz_, quryMul_);
+  AllctAndFill(scbkCnt_, scbkLstSiz_, scbkLst_);
+  AllctAndFill(scbkCnt_, inPdSngSiz_, inPdSng_);
+  AllctAndFill(scbkCnt_, inPdMulSiz_, inPdMul_);
 }
 
 void ProdQuan::MsrSngTime(void) {
