@@ -7,10 +7,12 @@
 
 #include "BaseQuan.h"
 
+#include <iostream>
 #include <cstdlib>
 #include <cfloat>
 
 void BaseQuan::FillArray(Array<float>& array) {
+  // fill-up the array with random numbers, ranging from -0.5 to +0.5
   float* p = array.GetDataPtr();
   std::size_t eleCnt = array.GetEleCnt();
   for (std::size_t eleIdx = 0; eleIdx < eleCnt; ++eleIdx) {

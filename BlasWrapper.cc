@@ -20,7 +20,7 @@ void VecMatProd(const Array<float>& a, const Array<float>& b, Array<float>& c) {
     std::cout << "invalid input array(s)" << std::endl;
     exit(-1);
   } // ENDIF: b
-  if ((c.GetDimLen(0) == m) || (c.GetDimLen(1) == 1)) {
+  if ((c.GetDimLen(0) != m) || (c.GetDimLen(1) != 1)) {
     std::cout << "invalid output array" << std::endl;
     exit(-1);
   } // ENDIF: c
@@ -55,7 +55,7 @@ void MatMatProd(const Array<float>& a, const Array<float>& b, Array<float>& c) {
     std::cout << "invalid input array(s)" << std::endl;
     exit(-1);
   } // ENDIF: b
-  if ((c.GetDimLen(0) == m) || (c.GetDimLen(1) == n)) {
+  if ((c.GetDimLen(0) != m) || (c.GetDimLen(1) != n)) {
     std::cout << "invalid output array" << std::endl;
     exit(-1);
   } // ENDIF: c
