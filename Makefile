@@ -7,7 +7,7 @@ CFLAGS=-Wall -O2 $(CFLAGS_MKL)
 LIBS_MKL=-L/opt/intel/mkl/lib/intel64 -lmkl_intel_lp64 \
 	-lmkl_sequential -lmkl_core -pthread
 LIBS=$(LIBS_MKL)
-DFLAGS=
+DFLAGS=-D ENABLE_MKL
 TARGET=PQwithBLAS
 
 $(TARGET): $(OBJS)

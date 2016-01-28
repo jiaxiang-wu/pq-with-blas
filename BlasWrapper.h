@@ -13,26 +13,26 @@
 #include "Array.hpp"
 
 /*
- * All matrices are in the column-major ordering, e.g. the element comes after
- *   a[0][0] is a[1][0], not a[0][1] (as in the convention for C/C++).
+ * All matrices are in the row-major ordering, e.g. the element comes after
+ *   a[0][0] is a[0][1] (C/C++ style), not a[1][0] (Fortran style).
  */
 
 // INTRO
 //   compute the product between a vector and a matrix
 // INPUT
-//   a: k x 1
-//   b: k x n
+//   a: 1 x k
+//   b: n x k
 // OUTPUT
-//   c: 1 x n (= trans(a) * b)
+//   c: 1 x n (= a * b')
 void VecMatProd(const Array<float>& a, const Array<float>& b, Array<float>& c);
 
 // INTRO
 //   compute the product between two matrices
 // INPUT
-//   a: k x m
-//   b: k x n
+//   a: m x k
+//   b: n x k
 // OUTPUT
-//   c: m x n (= trans(a) * b)
+//   c: m x n (= a * b')
 void MatMatProd(const Array<float>& a, const Array<float>& b, Array<float>& c);
 
 #endif // BLASWRAPPER_H_INCLUDED
