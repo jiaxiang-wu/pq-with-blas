@@ -2,10 +2,11 @@ CC=g++
 SRCS=$(wildcard *.cc)
 DEPS=$(patsubst %.cc, %.d, $(SRCS))
 OBJS=$(patsubst %.cc, %.o, $(SRCS))
-CFLAGS_OPENBLAS=-I./OpenBLAS-build/include
-CFLAGS=-Wall -O2 $(CFLAGS_OPENBLAS)
-LIBS_OPENBLAS=-L./OpenBLAS-build/lib -pthread -lopenblas
-LIBS=$(LIBS_OPENBLAS)
+CFLAGS_MKL=-I/opt/intel/mkl/include
+CFLAGS=-Wall -O2 $(CFLAGS_MKL)
+LIBS_MKL=-L/opt/intel/mkl/lib/intel64 -lmkl_intel_lp64 \
+	-lmkl_sequential -lmkl_core -pthread
+LIBS=$(LIBS_MKL)
 DFLAGS=
 TARGET=PQwithBLAS
 
