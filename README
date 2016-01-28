@@ -17,3 +17,29 @@ In Tree Quantization, a structured sparsity constraint is also introduced (Each
 This project aims at comparing the wall-time consumption of the pre-computation
   stage in PQ, CKM/OPQ, CQ/AQ, SCQ and TQ under various parameter settings.
 
+================================================================================
+
+----------------------------------------------------
+| Method         | Single Query | Multiple Queries |
+----------------------------------------------------
+| PQ (built-in)  |        0.035 |            1.797 |
+| PQ (IntelMKL)  |        0.019 |            0.220 |
+----------------------------------------------------
+| OPQ (built-in) |          n/a |              n/a |
+| OPQ (IntelMKL) |          n/a |              n/a |
+----------------------------------------------------
+| CQ (built-in)  |          n/a |              n/a |
+| CQ (IntelMKL)  |          n/a |              n/a |
+----------------------------------------------------
+| SCQ (built-in) |          n/a |              n/a |
+| SCQ (IntelMKL) |          n/a |              n/a |
+----------------------------------------------------
+| TQ (built-in)  |          n/a |              n/a |
+| TQ (IntelMKL)  |          n/a |              n/a |
+----------------------------------------------------
+
+Note:
+1. 64 queries are packed in a batch in case of "Multiple Queries".
+2. All reported time is the average value of 10k runs, on an Intel(R) Xeon(R)
+     E5-2640 CPU @ 2.50GHz, single-threaded.
+
