@@ -20,10 +20,10 @@
 // INTRO
 //   compute the product between a vector and a matrix
 // INPUT
-//   a: 1 x k
-//   b: n x k
+//   a: m x k
+//   b: 1 x k
 // OUTPUT
-//   c: 1 x n (= a * b')
+//   c: m x 1 (= a * b')
 void VecMatProd(const Array<float>& a, const Array<float>& b, Array<float>& c);
 
 // INTRO
