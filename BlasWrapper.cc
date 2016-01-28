@@ -39,7 +39,7 @@ void VecMatProd(const Array<float>& a, const Array<float>& b, Array<float>& c) {
   } // ENDFOR: im
 #else
   // use MKL-based implementation
-  cblas_sgemv(CblasRowMajor, CblasNoTrans, n, k, 1.0, \
+  cblas_sgemv(CblasRowMajor, CblasNoTrans, m, k, 1.0, \
       a.GetDataPtr(), k, b.GetDataPtr(), 1, 0.0, c.GetDataPtr(), 1);
 #endif // ENABLE_MKL
 }
