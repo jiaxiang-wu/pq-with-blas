@@ -1,9 +1,4 @@
-# OpenBLAS/SparseBLAS libraries
-OpenBLAS/*
-OpenBLAS-build/*
-SparseBLAS/*
-
-# C++ objective executive files
+# C++ objective and executive files
 *.d
 *.o
 PQwithBLAS
