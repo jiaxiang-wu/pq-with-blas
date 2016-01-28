@@ -17,7 +17,7 @@ template <typename Dtype>
 class Array {
 public:
   // constructor function
-  inline Array(void) : siz_(ArraySiz(0)), pData_(NULL) {}
+  inline Array(void) : siz_(ArraySiz(0)), eleCnt_(0), pData_(NULL) {}
   inline Array(const ArraySiz& siz);
   // de-constructor function
   inline ~Array(void);
