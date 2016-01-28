@@ -8,6 +8,8 @@
 #ifndef BASEQUAN_H_INCLUDED
 #define BASEQUAN_H_INCLUDED
 
+#include <vector>
+
 #include "Array.hpp"
 
 class BaseQuan {
@@ -19,7 +21,7 @@ public:
   // measure the time consumption of processing multiple queries
   void MsrMulTime(void);
 
-private:
+protected:
   // the number of feature dimensions
   std::size_t featCnt_;
   // the number of sub-codebooks
@@ -31,13 +33,15 @@ private:
   // the number of repeative runs (for more stable time measurement)
   std::size_t reptCnt_;
 
-private:
+protected:
   // the array containing a single query
   Array<float> qurySng;
   // the array containing multiple queries
   Array<float> quryMul;
-  // the array containing all sub-codebooks
-  Array<float> scbkLst;
+  // the list of sub-codebooks
+  std::vector<Array<float> > scbkLst;
+  // the list of pre-computed inner products
+  std::vector<Array<float> > inPdLst;
 };
 
 #endif // BASEQUAN_H_INCLUDED

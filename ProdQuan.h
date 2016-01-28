@@ -22,6 +22,12 @@ class ProdQuan: public BaseQuan {
 public:
   // set-up PQ's parameters
   void SetParam(const ProdQuanParam& param);
+  // fill-up essential arrays with random number
+  void Fillup(void);
+  // measure the time consumption of processing a single query
+  void MsrSngTime(void);
+  // measure the time consumption of processing multiple queries
+  void MsrMulTime(void);
 
 private:
   // extra member variables
