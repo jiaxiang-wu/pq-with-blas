@@ -22,18 +22,22 @@
 // INPUT
 //   a: m x k
 //   b: 1 x k
+//   enblMKL: true (use MKL) / false (use built-in)
 // OUTPUT
 //   c: m x 1 (= a * b')
-void VecMatProd(const Array<float>& a, const Array<float>& b, Array<float>& c);
+void VecMatProd(const Array<float>& a, \
+    const Array<float>& b, const bool enblMKL, Array<float>& c);
 
 // INTRO
 //   compute the product between two matrices
 // INPUT
 //   a: m x k
 //   b: n x k
+//   enblMKL: true (use MKL) / false (use built-in)
 // OUTPUT
 //   c: m x n (= a * b')
-void MatMatProd(const Array<float>& a, const Array<float>& b, Array<float>& c);
+void MatMatProd(const Array<float>& a, \
+    const Array<float>& b, const bool enblMKL, Array<float>& c);
 
 #endif // BLASWRAPPER_H_INCLUDED
 

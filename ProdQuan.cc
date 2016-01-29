@@ -63,26 +63,28 @@ void ProdQuan::Fillup(void) {
   AllctAndFill(scbkCnt_, inPdMulSiz_, inPdMul_);
 }
 
-void ProdQuan::MsrSngTime(void) {
+void ProdQuan::MsrSngTime(const bool enblMKL) {
   // display the greeting message
   std::cout << "[INFO] entering ProdQuan::MsrSngTime()" << std::endl;
 
   // execute multiple runs for stable time measurement
   for (std::size_t reptIdx = 0; reptIdx < reptCnt_; ++reptIdx) {
     for (std::size_t scbkIdx = 0; scbkIdx < scbkCnt_; ++scbkIdx) {
-      VecMatProd(scbkLst_[scbkIdx], qurySng_[scbkIdx], inPdSng_[scbkIdx]);
+      VecMatProd(scbkLst_[scbkIdx], \
+          qurySng_[scbkIdx], enblMKL, inPdSng_[scbkIdx]);
     } // ENDFOR: scbkIdx
   } // ENDFOR: reptIdx
 }
 
-void ProdQuan::MsrMulTime(void) {
+void ProdQuan::MsrMulTime(const bool enblMKL) {
   // display the greeting message
   std::cout << "[INFO] entering ProdQuan::MsrMulTime()" << std::endl;
 
   // execute multiple runs for stable time measurement
   for (std::size_t reptIdx = 0; reptIdx < reptCnt_; ++reptIdx) {
     for (std::size_t scbkIdx = 0; scbkIdx < scbkCnt_; ++scbkIdx) {
-      MatMatProd(scbkLst_[scbkIdx], quryMul_[scbkIdx], inPdMul_[scbkIdx]);
+      MatMatProd(scbkLst_[scbkIdx], \
+          quryMul_[scbkIdx], enblMKL, inPdMul_[scbkIdx]);
     } // ENDFOR: scbkIdx
   } // ENDFOR: reptIdx
 }

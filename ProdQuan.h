@@ -25,9 +25,9 @@ public:
   // fill-up essential arrays with random number
   void Fillup(void);
   // measure the time consumption of processing a single query
-  void MsrSngTime(void);
+  void MsrSngTime(const bool enblMKL);
   // measure the time consumption of processing multiple queries
-  void MsrMulTime(void);
+  void MsrMulTime(const bool enblMKL);
 
 private:
   // extra member variables
