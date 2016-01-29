@@ -10,14 +10,15 @@
 
 #include "ProdQuan.h"
 #include "OptProdQuan.h"
+#include "CompQuan.h"
 #include "StopWatch.hpp"
 
 // define constant variables
-const std::size_t kFeatCnt = 128;
+const std::size_t kFeatCnt = 960;
 const std::size_t kScbkCnt = 8;
 const std::size_t kScwdCnt = 256;
 const std::size_t kQuryCnt = 64;
-const std::size_t kReptCnt = 1000;
+const std::size_t kReptCnt = 10000;
 const std::size_t kFeatCntPrj = kFeatCnt;
 
 // evaluation function for Product Quantization
@@ -38,6 +39,7 @@ void EvaGnrlQuan(GnrlQuan& quanObj);
 int main(int argc, char* argv[]) {
   EvaProdQuan();
   EvaOptProdQuan();
+  EvaCompQuan();
 
   return 0;
 }
@@ -77,6 +79,24 @@ void EvaOptProdQuan(void) {
 
   // call the general evaluation function
   EvaGnrlQuan(optProdQuanObj);
+}
+
+void EvaCompQuan(void) {
+  // declare objects
+  CompQuan compQuanObj;
+  CompQuanParam param;
+
+  // set-up PQ's parameters
+  param.featCnt = kFeatCnt;
+  param.scbkCnt = kScbkCnt;
+  param.scwdCnt = kScwdCnt;
+  param.quryCnt = kQuryCnt;
+  param.reptCnt = kReptCnt;
+  compQuanObj.SetParam(param);
+  compQuanObj.Fillup();
+
+  // call the general evaluation function
+  EvaGnrlQuan(compQuanObj);
 }
 
 template<class GnrlQuan>
