@@ -19,34 +19,32 @@ This project aims at comparing the wall-time consumption of the pre-computation
 
 ================================================================================
 
---------------------------------------------------------------
-| Feature Dim.   |          128 (SIFT) |          960 (SIFT) |
---------------------------------------------------------------
-| Method         |   Single | Multiple |   Single | Multiple |
---------------------------------------------------------------
-| PQ  (built-in) |    0.026 |    1.649 |      n/a |      n/a |
-| PQ  (IntelMKL) |    0.015 |    0.203 |      n/a |      n/a |
---------------------------------------------------------------
-| OPQ (built-in) |      n/a |      n/a |      n/a |      n/a |
-| OPQ (IntelMKL) |      n/a |      n/a |      n/a |      n/a |
---------------------------------------------------------------
-| CQ  (built-in) |      n/a |      n/a |      n/a |      n/a |
-| CQ  (IntelMKL) |      n/a |      n/a |      n/a |      n/a |
---------------------------------------------------------------
-| SCQ (built-in) |      n/a |      n/a |      n/a |      n/a |
-| SCQ (IntelMKL) |      n/a |      n/a |      n/a |      n/a |
---------------------------------------------------------------
-| TQ  (built-in) |      n/a |      n/a |      n/a |      n/a |
-| TQ  (IntelMKL) |      n/a |      n/a |      n/a |      n/a |
---------------------------------------------------------------
+--------------------------------------------------
+| Feature Dim.   |    128 (SIFT) |    960 (GIST) |
+--------------------------------------------------
+| Batch Size     |     1 |    64 |     1 |    64 |
+--------------------------------------------------
+| PQ  (built-in) | 0.030 | 1.630 |   n/a |   n/a |
+| PQ  (IntelMKL) | 0.020 | 0.210 |   n/a |   n/a |
+--------------------------------------------------
+| OPQ (built-in) | 0.050 | 2.650 |   n/a |   n/a |
+| OPQ (IntelMKL) | 0.020 | 0.280 |   n/a |   n/a |
+--------------------------------------------------
+| CQ  (built-in) |   n/a |   n/a |   n/a |   n/a |
+| CQ  (IntelMKL) |   n/a |   n/a |   n/a |   n/a |
+--------------------------------------------------
+| SCQ (built-in) |   n/a |   n/a |   n/a |   n/a |
+| SCQ (IntelMKL) |   n/a |   n/a |   n/a |   n/a |
+--------------------------------------------------
+| TQ  (built-in) |   n/a |   n/a |   n/a |   n/a |
+| TQ  (IntelMKL) |   n/a |   n/a |   n/a |   n/a |
+--------------------------------------------------
 
 Note:
-1. In the "Single" setting, one query is processed at a time; in the "Multiple"
-     setting, 64 queries are packed in a batch and processed together.
-2. All reported time (in millisecond) is the average value of 10k runs, on an
+1. All reported time (in millisecond) is the average value of 10k runs, on an
      Intel(R) Xeon(R) E5-2640 CPU @ 2.50GHz, single-threaded.
+2. The reported time may not be accurate, since the computer was also running
+     other jobs while the experiments were carried out.
 3. OPQ/CKM and CQ/AQ are basically the same during the pre-computation stage,
      thus only one is reported for each pair.
-4. The reported time may not be accurate, since the computer was also running
-     other jobs while the experiments were carried out.
 
