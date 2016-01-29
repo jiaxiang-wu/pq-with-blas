@@ -16,7 +16,7 @@ const std::size_t kFeatCnt = 128;
 const std::size_t kScbkCnt = 8;
 const std::size_t kScwdCnt = 256;
 const std::size_t kQuryCnt = 64;
-const std::size_t kReptCnt = 10000;
+const std::size_t kReptCnt = 1000;
 
 void EvaProdQuan(void) {
   // declare objects

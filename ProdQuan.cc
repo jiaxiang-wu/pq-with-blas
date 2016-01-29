@@ -8,6 +8,7 @@
 #include "ProdQuan.h"
 
 #include <iostream>
+#include <cstring>
 
 #include "BlasWrapper.h"
 
@@ -39,12 +40,18 @@ void ProdQuan::Fillup(void) {
   std::cout << "[INFO] entering ProdQuan::Fillup()" << std::endl;
 
   // compute the size of each array
-  qurySngSiz_.resize(2);
-  qurySngSiz_[0] = 1;
-  qurySngSiz_[1] = featCntPerScbk_;
-  quryMulSiz_.resize(2);
-  quryMulSiz_[0] = quryCnt_;
-  quryMulSiz_[1] = featCntPerScbk_;
+  quryOrgSngSiz_.resize(2);
+  quryOrgSngSiz_[0] = 1;
+  quryOrgSngSiz_[1] = featCnt_;
+  quryOrgMulSiz_.resize(2);
+  quryOrgMulSiz_[0] = quryCnt_;
+  quryOrgMulSiz_[1] = featCnt_;
+  quryDcpSngSiz_.resize(2);
+  quryDcpSngSiz_[0] = 1;
+  quryDcpSngSiz_[1] = featCntPerScbk_;
+  quryDcpMulSiz_.resize(2);
+  quryDcpMulSiz_[0] = quryCnt_;
+  quryDcpMulSiz_[1] = featCntPerScbk_;
   scbkLstSiz_.resize(2);
   scbkLstSiz_[0] = scwdCnt_;
   scbkLstSiz_[1] = featCntPerScbk_;
@@ -56,8 +63,10 @@ void ProdQuan::Fillup(void) {
   inPdMulSiz_[1] = quryCnt_;
 
   // fill-up the above arrays with random numbers
-  AllctAndFill(scbkCnt_, qurySngSiz_, qurySng_);
-  AllctAndFill(scbkCnt_, quryMulSiz_, quryMul_);
+  AllctAndFill(quryOrgSngSiz_, quryOrgSng_);
+  AllctAndFill(quryOrgMulSiz_, quryOrgMul_);
+  AllctAndFill(scbkCnt_, quryDcpSngSiz_, quryDcpSng_);
+  AllctAndFill(scbkCnt_, quryDcpMulSiz_, quryDcpMul_);
   AllctAndFill(scbkCnt_, scbkLstSiz_, scbkLst_);
   AllctAndFill(scbkCnt_, inPdSngSiz_, inPdSng_);
   AllctAndFill(scbkCnt_, inPdMulSiz_, inPdMul_);
@@ -69,9 +78,17 @@ void ProdQuan::MsrSngTime(const bool enblMKL) {
 
   // execute multiple runs for stable time measurement
   for (std::size_t reptIdx = 0; reptIdx < reptCnt_; ++reptIdx) {
+    // split the query vector into sub-query vectors
+    for (std::size_t scbkIdx = 0; scbkIdx < scbkCnt_; ++scbkIdx) {
+      const float* pSrc = quryOrgSng_.GetDataPtr() + scbkIdx * featCntPerScbk_;
+      float* pDst = quryDcpSng_[scbkIdx].GetDataPtr();
+      memcpy(pDst, pSrc, sizeof(float) * featCntPerScbk_);
+    } // ENDFOR: scbkIdx
+
+    // pre-compute the inner products
     for (std::size_t scbkIdx = 0; scbkIdx < scbkCnt_; ++scbkIdx) {
       VecMatProd(scbkLst_[scbkIdx], \
-          qurySng_[scbkIdx], enblMKL, inPdSng_[scbkIdx]);
+          quryDcpSng_[scbkIdx], enblMKL, inPdSng_[scbkIdx]);
     } // ENDFOR: scbkIdx
   } // ENDFOR: reptIdx
 }
@@ -82,9 +99,21 @@ void ProdQuan::MsrMulTime(const bool enblMKL) {
 
   // execute multiple runs for stable time measurement
   for (std::size_t reptIdx = 0; reptIdx < reptCnt_; ++reptIdx) {
+    // split the query vectors into sub-query vectors
+    for (std::size_t quryIdx = 0; quryIdx < quryCnt_; ++quryIdx) {
+      for (std::size_t scbkIdx = 0; scbkIdx < scbkCnt_; ++scbkIdx) {
+        const float* pSrc = quryOrgMul_.GetDataPtr() \
+            + quryIdx * featCnt_ + scbkIdx * featCntPerScbk_;
+        float* pDst = quryDcpMul_[scbkIdx].GetDataPtr() \
+            + quryIdx * featCntPerScbk_;
+        memcpy(pDst, pSrc, sizeof(float) * featCntPerScbk_);
+      }
+    } // ENDFOR: quryIdx
+
+    // pre-compute the inner products
     for (std::size_t scbkIdx = 0; scbkIdx < scbkCnt_; ++scbkIdx) {
       MatMatProd(scbkLst_[scbkIdx], \
-          quryMul_[scbkIdx], enblMKL, inPdMul_[scbkIdx]);
+          quryDcpMul_[scbkIdx], enblMKL, inPdMul_[scbkIdx]);
     } // ENDFOR: scbkIdx
   } // ENDFOR: reptIdx
 }

@@ -12,8 +12,6 @@
 
 class StopWatch {
 public:
-  // ready for timing
-  void Ready(void);
   // start timing
   void Start(void);
   // pause timing
@@ -35,11 +33,6 @@ private:
 };
 
 // Following are the implementations of the <StopWatch> class
-
-inline void StopWatch::Ready(void) {
-  isRun = false;
-  timeElps = 0.0;
-}
 
 inline void StopWatch::Start(void) {
   isRun = true;

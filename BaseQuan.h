@@ -15,6 +15,7 @@
 class BaseQuan {
 public:
   // allocate and fill-up a list of arrays of the same size
+  void AllctAndFill(const ArraySiz& siz, Array<float>& array);
   void AllctAndFill(const std::size_t len, \
       const ArraySiz& siz, std::vector<Array<float> >& arrays);
 
@@ -35,12 +36,18 @@ protected:
   std::size_t featCntPerScbk_;
 
 protected:
+  // the original query (single)
+  ArraySiz quryOrgSngSiz_;
+  Array<float> quryOrgSng_;
+  // the original queries (multiple)
+  ArraySiz quryOrgMulSiz_;
+  Array<float> quryOrgMul_;
   // the list of decomposed sub-queries (single)
-  ArraySiz qurySngSiz_;
-  std::vector<Array<float> > qurySng_;
+  ArraySiz quryDcpSngSiz_;
+  std::vector<Array<float> > quryDcpSng_;
   // the list of decomposed sub-queries (multiple)
-  ArraySiz quryMulSiz_;
-  std::vector<Array<float> > quryMul_;
+  ArraySiz quryDcpMulSiz_;
+  std::vector<Array<float> > quryDcpMul_;
   // the list of sub-codebooks
   ArraySiz scbkLstSiz_;
   std::vector<Array<float> > scbkLst_;
