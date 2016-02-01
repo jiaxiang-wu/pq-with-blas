@@ -17,44 +17,49 @@
 const std::size_t kFeatCnt = 960;
 const std::size_t kScbkCnt = 8;
 const std::size_t kScwdCnt = 256;
-const std::size_t kQuryCnt = 64;
-const std::size_t kReptCnt = 10000;
+const std::size_t kQuryCnt = 10000;
+const std::size_t kBtchSiz = 50;
 const std::size_t kFeatCntPrj = kFeatCnt;
+const float kSprsRat = 1.0 / kScbkCnt; // to compare with PQ
 
 // evaluation function for Product Quantization
-void EvaProdQuan(void);
+void EvaProdQuan(const BaseQuanParam& bqParam);
 // evaluation function for Optimized Product Quantization
-void EvaOptProdQuan(void);
+void EvaOptProdQuan(const BaseQuanParam& bqParam);
 // evaluation function for Composite Quantization
-void EvaCompQuan(void);
+void EvaCompQuan(const BaseQuanParam& bqParam);
 // evaluation function for Sparse Composite Quantization
-void EvaSprsCompQuan(void);
+void EvaSprsCompQuan(const BaseQuanParam& bqParam);
 // evaluation function for Tree Quantization
-void EvaTreeQuan(void);
+void EvaTreeQuan(const BaseQuanParam& bqParam);
 
 // general evaluation function for all quantization methods
 template<class GnrlQuan>
 void EvaGnrlQuan(GnrlQuan& quanObj);
 
 int main(int argc, char* argv[]) {
-  EvaProdQuan();
-  EvaOptProdQuan();
-  EvaCompQuan();
+  // define parameters for base quantization
+  BaseQuanParam bqParam;
+  bqParam.featCnt_ = kFeatCnt;
+  bqParam.scbkCnt_ = kScbkCnt;
+  bqParam.scwdCnt_ = kScwdCnt;
+  bqParam.quryCnt_ = kQuryCnt;
+  bqParam.btchSiz_ = kBtchSiz;
+
+  // evaluate each quantization method
+  EvaProdQuan(bqParam);
+  EvaOptProdQuan(bqParam);
+  EvaCompQuan(bqParam);
 
   return 0;
 }
 
-void EvaProdQuan(void) {
+void EvaProdQuan(const BaseQuanParam& bqParam) {
   // declare objects
   ProdQuan prodQuanObj;
-  ProdQuanParam param;
 
   // set-up PQ's parameters
-  param.featCnt = kFeatCnt;
-  param.scbkCnt = kScbkCnt;
-  param.scwdCnt = kScwdCnt;
-  param.quryCnt = kQuryCnt;
-  param.reptCnt = kReptCnt;
+  ProdQuanParam param(bqParam);
   prodQuanObj.SetParam(param);
   prodQuanObj.Fillup();
 
@@ -62,18 +67,13 @@ void EvaProdQuan(void) {
   EvaGnrlQuan(prodQuanObj);
 }
 
-void EvaOptProdQuan(void) {
+void EvaOptProdQuan(const BaseQuanParam& bqParam) {
   // declare objects
   OptProdQuan optProdQuanObj;
-  OptProdQuanParam param;
 
   // set-up OPQ's parameters
-  param.featCnt = kFeatCnt;
-  param.scbkCnt = kScbkCnt;
-  param.scwdCnt = kScwdCnt;
-  param.quryCnt = kQuryCnt;
-  param.reptCnt = kReptCnt;
-  param.featCntPrj = kFeatCntPrj;
+  OptProdQuanParam param(bqParam);
+  param.featCntPrj_ = kFeatCntPrj;
   optProdQuanObj.SetParam(param);
   optProdQuanObj.Fillup();
 
@@ -81,17 +81,12 @@ void EvaOptProdQuan(void) {
   EvaGnrlQuan(optProdQuanObj);
 }
 
-void EvaCompQuan(void) {
+void EvaCompQuan(const BaseQuanParam& bqParam) {
   // declare objects
   CompQuan compQuanObj;
-  CompQuanParam param;
 
-  // set-up PQ's parameters
-  param.featCnt = kFeatCnt;
-  param.scbkCnt = kScbkCnt;
-  param.scwdCnt = kScwdCnt;
-  param.quryCnt = kQuryCnt;
-  param.reptCnt = kReptCnt;
+  // set-up CQ's parameters
+  CompQuanParam param(bqParam);
   compQuanObj.SetParam(param);
   compQuanObj.Fillup();
 
@@ -107,40 +102,31 @@ void EvaGnrlQuan(GnrlQuan& quanObj) {
   float timeElpsSng;
   float timeElpsMul;
 
-  /* STAGE #1: built-in implementation */
-  // evaluate the time consumption of processing a single query
-  swSngQury.Start();
-  quanObj.MsrSngTime(false);
-  timeElpsSng = swSngQury.Stop() / kReptCnt;
+  // define the MKL usage indicators
+  std::vector<bool> enblMklLst(2);
+  enblMklLst[0] = false; // use built-in implementaion
+  enblMklLst[1] = true; // use MKL implementation
 
-  // evaluate the time consumption of processing multiple queries
-  swMulQury.Start();
-  quanObj.MsrMulTime(false);
-  timeElpsMul = swMulQury.Stop() / kReptCnt;
+  // evaluate the time consumption under two settings
+  std::cout << std::fixed; // switch to fixed-point output
+  for (std::size_t idx = 0; idx < enblMklLst.size(); ++idx) {
+    // evaluate the time consumption of processing a single query
+    swSngQury.Start();
+    quanObj.MsrSngTime(enblMklLst[idx]);
+    timeElpsSng = swSngQury.Stop() / kQuryCnt;
 
-  // display the comparison on time comsumption
-  std::cout << std::fixed;
-  std::cout << "[INFO] NoMKL-Single  : " << std::setprecision(3) \
-      << timeElpsSng * 1000 << " ms\n";
-  std::cout << "[INFO] NoMKL-Multiple: " << std::setprecision(3) \
-      << timeElpsMul * 1000 << " ms\n";
+    // evaluate the time consumption of processing multiple queries
+    swMulQury.Start();
+    quanObj.MsrMulTime(enblMklLst[idx]);
+    timeElpsMul = swMulQury.Stop() / kQuryCnt;
 
-  /* STAGE #2: MKL implementation */
-  // evaluate the time consumption of processing a single query
-  swSngQury.Start();
-  quanObj.MsrSngTime(true);
-  timeElpsSng = swSngQury.Stop() / kReptCnt;
-
-  // evaluate the time consumption of processing multiple queries
-  swMulQury.Start();
-  quanObj.MsrMulTime(true);
-  timeElpsMul = swMulQury.Stop() / kReptCnt;
-
-  // display the comparison on time comsumption
-  std::cout << std::fixed;
-  std::cout << "[INFO] MKL-Single    : " << std::setprecision(3) \
-      << timeElpsSng * 1000 << " ms\n";
-  std::cout << "[INFO] MKL-Multiple  : " << std::setprecision(3) \
-      << timeElpsMul * 1000 << " ms\n";
+    // display the comparison on time comsumption
+    std::cout << "[INFO] " << (enblMklLst[idx] ? \
+        "use MKL implementation\n" : "use built-in implementation\n");
+    std::cout << "[INFO] Single  : " << std::setprecision(3) \
+        << timeElpsSng * 1000 << " ms\n";
+    std::cout << "[INFO] Multiple: " << std::setprecision(3) \
+        << timeElpsMul * 1000 << " ms\n";
+  } // ENDFOR: idx
 }
 

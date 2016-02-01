@@ -10,14 +10,15 @@
 
 #include "BaseQuan.h"
 
-typedef struct {
-  std::size_t featCnt;
-  std::size_t scbkCnt;
-  std::size_t scwdCnt;
-  std::size_t quryCnt;
-  std::size_t reptCnt;
-  std::size_t featCntPrj;
-} OptProdQuanParam;
+class OptProdQuanParam : public BaseQuanParam {
+public:
+  OptProdQuanParam(void) {}
+  OptProdQuanParam(const BaseQuanParam& param);
+
+public:
+  // the number of projected feature dimensions
+  std::size_t featCntPrj_;
+};
 
 class OptProdQuan: public BaseQuan {
 public:
@@ -31,8 +32,8 @@ public:
   void MsrMulTime(const bool enblMKL);
 
 public:
-  // the number of projected feature dimensions
-  std::size_t featCntPrj_;
+  // OPQ's parameters
+  OptProdQuanParam param_;
   // the number of projected feature dimensions for each sub-codebook
   std::size_t featCntPrjPerScbk_;
 

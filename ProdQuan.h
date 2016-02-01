@@ -10,13 +10,14 @@
 
 #include "BaseQuan.h"
 
-typedef struct {
-  std::size_t featCnt;
-  std::size_t scbkCnt;
-  std::size_t scwdCnt;
-  std::size_t quryCnt;
-  std::size_t reptCnt;
-} ProdQuanParam;
+class ProdQuanParam : public BaseQuanParam {
+public:
+  ProdQuanParam(void) {}
+  ProdQuanParam(const BaseQuanParam& param);
+
+public:
+  // no extra parameters required
+};
 
 class ProdQuan: public BaseQuan {
 public:
@@ -30,7 +31,10 @@ public:
   void MsrMulTime(const bool enblMKL);
 
 private:
-  // extra member variables
+  // PQ's parameters
+  ProdQuanParam param_;
+  // the number of feature dimensions for each sub-codebook
+  std::size_t featCntPerScbk_;
 };
 
 #endif // PRODQUAN_H_INCLUDED

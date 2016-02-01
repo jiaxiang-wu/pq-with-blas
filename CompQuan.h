@@ -10,13 +10,14 @@
 
 #include "BaseQuan.h"
 
-typedef struct {
-  std::size_t featCnt;
-  std::size_t scbkCnt;
-  std::size_t scwdCnt;
-  std::size_t quryCnt;
-  std::size_t reptCnt;
-} CompQuanParam;
+class CompQuanParam : public BaseQuanParam {
+public:
+  CompQuanParam(void) {}
+  CompQuanParam(const BaseQuanParam& param);
+
+public:
+  // no extra parameters required
+};
 
 class CompQuan: public BaseQuan {
 public:
@@ -30,7 +31,8 @@ public:
   void MsrMulTime(const bool enblMKL);
 
 private:
-  // extra member variables
+  // CQ's parameters
+  CompQuanParam param_;
 };
 
 #endif // COMPQUAN_H_INCLUDED
