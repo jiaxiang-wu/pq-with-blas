@@ -34,8 +34,22 @@ public:
   inline MKL_INT* GetPtrb(void) const;
   // obtain the pointer <ptre_>
   inline MKL_INT* GetPtre(void) const;
+  // obtain the number of rows
+  inline std::size_t GetRowCnt(void) const;
+  // obtain the number of columns
+  inline std::size_t GetColCnt(void) const;
+  // obtain the number of non-zero elements
+  inline std::size_t GetNnzCnt(void) const;
+  // display the size information
+  inline void DispSiz(void) const;
 
 private:
+  // the number of rows
+  std::size_t rowCnt_;
+  // the number of columns
+  std::size_t colCnt_;
+  // the number of non-zero elements
+  std::size_t nnzCnt_;
   // the real-valued array of non-zero values
   Dtype* val_;
   // the column indexes of non-zero values
@@ -74,14 +88,14 @@ void SprsArray<Dtype>::Create(const Array<Dtype>& array) {
   } // ENDIF: array
 
   // obtain basic variables
-  std::size_t rowCnt = array.GetDimLen(0);
-  std::size_t colCnt = array.GetDimLen(1);
+  rowCnt_ = array.GetDimLen(0);
+  colCnt_ = array.GetDimLen(1);
+  nnzCnt_ = 0;
   std::size_t eleCnt = array.GetEleCnt();
-  std::size_t nnzCnt = 0;
   const Dtype* pData = array.GetDataPtr();
   for (std::size_t eleIdx = 0; eleIdx < eleCnt; ++eleIdx) {
     if (ABS(pData[eleIdx]) > kEpsilon) {
-      nnzCnt++;
+      nnzCnt_++;
     } // ENDIF: ABS
   } // ENDFOR: eleIdx
 
@@ -89,20 +103,20 @@ void SprsArray<Dtype>::Create(const Array<Dtype>& array) {
   Delete();
 
   // allocate space for pointers
-  val_ = new Dtype[nnzCnt];
-  idx_ = new MKL_INT[nnzCnt];
-  ptrb_ = new MKL_INT[rowCnt];
-  ptre_ = new MKL_INT[rowCnt];
+  val_ = new Dtype[nnzCnt_];
+  idx_ = new MKL_INT[nnzCnt_];
+  ptrb_ = new MKL_INT[rowCnt_];
+  ptre_ = new MKL_INT[rowCnt_];
 
   // convert the dense array to CSR format, zero-based indexing)
   std::size_t nnzIdx = 0;
-  for (std::size_t rowIdx = 0; rowIdx < rowCnt; ++rowIdx) {
+  for (std::size_t rowIdx = 0; rowIdx < rowCnt_; ++rowIdx) {
     // initialize variables for the current row
-    const Dtype* pData = array.GetDataPtr() + rowIdx * colCnt;
+    const Dtype* pData = array.GetDataPtr() + rowIdx * colCnt_;
     bool isFirst = true;
 
     // scan through the current row
-    for (std::size_t colIdx = 0; colIdx < colCnt; ++colIdx) {
+    for (std::size_t colIdx = 0; colIdx < colCnt_; ++colIdx) {
       if (ABS(pData[colIdx]) > kEpsilon) {
         val_[nnzIdx] = pData[colIdx];
         idx_[nnzIdx] = colIdx;
@@ -155,6 +169,28 @@ MKL_INT* SprsArray<Dtype>::GetPtrb(void) const {
 template<typename Dtype>
 MKL_INT* SprsArray<Dtype>::GetPtre(void) const {
   return ptre_;
+}
+
+template<typename Dtype>
+std::size_t SprsArray<Dtype>::GetRowCnt(void) const {
+  return rowCnt_;
+}
+
+template<typename Dtype>
+std::size_t SprsArray<Dtype>::GetColCnt(void) const {
+  return colCnt_;
+}
+
+template<typename Dtype>
+std::size_t SprsArray<Dtype>::GetNnzCnt(void) const {
+  return nnzCnt_;
+}
+
+template<typename Dtype>
+void SprsArray<Dtype>::DispSiz(void) const {
+  std::cout << "[INFO] # of nnz elements: " << nnzCnt_ << std::endl;
+  std::cout << "[INFO] Dim #0: " << rowCnt_ << std::endl;
+  std::cout << "[INFO] Dim #1: " << colCnt_ << std::endl;
 }
 
 #endif // SPRSARRAY_HPP_INCLUDED
