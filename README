@@ -15,7 +15,7 @@ In Tree Quantization, a structured sparsity constraint is also introduced (Each
   speed-up the computation of inner products.
 
 This project aims at comparing the wall-time consumption of the pre-computation
-  stage in PQ, CKM/OPQ, CQ/AQ, SCQ and TQ under various parameter settings.
+  stage in PQ, OPQ/CKM, CQ/AQ, SCQ and TQ under various parameter settings.
 
 ================================================================================
 

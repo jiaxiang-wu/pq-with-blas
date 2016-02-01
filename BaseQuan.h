@@ -33,20 +33,6 @@ public:
   void AllctAndFill(const std::size_t len, \
       const ArraySiz& siz, std::vector<Array<float> >& arrays);
 
-/*
-protected:
-  // the number of feature dimensions
-  std::size_t featCnt_;
-  // the number of sub-codebooks
-  std::size_t scbkCnt_;
-  // the number of sub-codewords in each sub-codebook
-  std::size_t scwdCnt_;
-  // the number of queries
-  std::size_t quryCnt_;
-  // the number of queries in a batch
-  std::size_t btchSiz_;
-*/
-
 protected:
   // the original query (single)
   ArraySiz quryOrgSngSiz_;
