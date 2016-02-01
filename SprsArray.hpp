@@ -12,6 +12,8 @@
 
 #include "Array.hpp"
 
+const float kEpsilon = 0.000001;
+
 template<typename Dtype>
 class SprsArray {
 public:
@@ -46,7 +48,8 @@ private:
 
 // Following are the implementations of the <SprsArray> class
 
-SprsArray::SprsArray(const Array<Dtype>& array) {
+template<typename Dtype>
+SprsArray<Dtype>::SprsArray(const Array<Dtype>& array) {
   // set all pointers to <NULL>
   val_ = NULL;
   idx_ = NULL;
@@ -57,11 +60,13 @@ SprsArray::SprsArray(const Array<Dtype>& array) {
   Create(array);
 }
 
-SprsArray::~SprsArray(void) {
+template<typename Dtype>
+SprsArray<Dtype>::~SprsArray(void) {
   Delete();
 }
 
-void SprsArray::Create(const Array<Dtype>& array) {
+template<typename Dtype>
+void SprsArray<Dtype>::Create(const Array<Dtype>& array) {
   // verify the array
   if (array.GetDimCnt() != 2) {
     std::cout << "[ERROR] the input array must be 2-dimensional" << std::endl;
@@ -71,7 +76,7 @@ void SprsArray::Create(const Array<Dtype>& array) {
   // obtain basic variables
   std::size_t rowCnt = array.GetDimLen(0);
   std::size_t colCnt = array.GetDimLen(1);
-  std::size_t eleCnt = arary.GetEleCnt();
+  std::size_t eleCnt = array.GetEleCnt();
   std::size_t nnzCnt = 0;
   const Dtype* pData = array.GetDataPtr();
   for (std::size_t eleIdx = 0; eleIdx < eleCnt; ++eleIdx) {
@@ -111,7 +116,8 @@ void SprsArray::Create(const Array<Dtype>& array) {
   } // ENDFOR: rowIdx
 }
 
-void SprsArray::Delete(void) {
+template<typename Dtype>
+void SprsArray<Dtype>::Delete(void) {
   // delete all pointers
   if (val_ != NULL) {
     delete[] val_;
@@ -131,21 +137,25 @@ void SprsArray::Delete(void) {
   } // ENDIF: ptre_;
 }
 
-Dtype* SprsArray::GetVal(void) const {
+template<typename Dtype>
+Dtype* SprsArray<Dtype>::GetVal(void) const {
   return val_;
 }
 
-MKL_INT* SprsArray::GetIdx(void) const {
+template<typename Dtype>
+MKL_INT* SprsArray<Dtype>::GetIdx(void) const {
   return idx_;
 }
 
-MKL_INT* SprsArray::GetPtrb(void) const {
+template<typename Dtype>
+MKL_INT* SprsArray<Dtype>::GetPtrb(void) const {
   return ptrb_;
 }
 
-MKL_INT* SprsArray::GetPtre(void) const {
+template<typename Dtype>
+MKL_INT* SprsArray<Dtype>::GetPtre(void) const {
   return ptre_;
 }
 
-#define SPRSARRAY_HPP_INCLUDED
+#endif // SPRSARRAY_HPP_INCLUDED
 

@@ -11,6 +11,7 @@
 #include <mkl.h>
 
 #include "Array.hpp"
+#include "SprsArray.hpp"
 
 /*
  * All matrices are in the row-major ordering, e.g. the element comes after
