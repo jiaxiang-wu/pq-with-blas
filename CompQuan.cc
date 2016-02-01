@@ -74,7 +74,7 @@ void CompQuan::MsrSngTime(const bool enblMKL) {
   for (std::size_t reptIdx = 0; reptIdx < reptCnt; ++reptIdx) {
     // pre-compute the inner products
     for (std::size_t scbkIdx = 0; scbkIdx < param_.scbkCnt_; ++scbkIdx) {
-      VecMatProd(scbkLst_[scbkIdx], quryOrgSng_, enblMKL, inPdSng_[scbkIdx]);
+      MatVecProd(scbkLst_[scbkIdx], quryOrgSng_, enblMKL, inPdSng_[scbkIdx]);
     } // ENDFOR: scbkIdx
   } // ENDFOR: reptIdx
 }

@@ -93,7 +93,7 @@ void ProdQuan::MsrSngTime(const bool enblMKL) {
 
     // pre-compute the inner products
     for (std::size_t scbkIdx = 0; scbkIdx < param_.scbkCnt_; ++scbkIdx) {
-      VecMatProd(scbkLst_[scbkIdx], \
+      MatVecProd(scbkLst_[scbkIdx], \
           quryDcpSng_[scbkIdx], enblMKL, inPdSng_[scbkIdx]);
     } // ENDFOR: scbkIdx
   } // ENDFOR: reptIdx

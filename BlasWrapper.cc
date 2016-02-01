@@ -12,7 +12,7 @@
 
 inline float CalcInPd(const float* pa, const float* pb, const std::size_t len);
 
-void VecMatProd(const Array<float>& a, \
+void MatVecProd(const Array<float>& a, \
     const Array<float>& b, const bool enblMKL, Array<float>& c) {
   // obtain basic variables
   std::size_t m = a.GetDimLen(0);

@@ -18,18 +18,18 @@
  */
 
 // INTRO
-//   compute the product between a vector and a matrix
+//   compute the product between a dense matrix and a dense vector
 // INPUT
 //   a: m x k
 //   b: 1 x k
 //   enblMKL: true (use MKL) / false (use built-in)
 // OUTPUT
 //   c: m x 1 (= a * b')
-void VecMatProd(const Array<float>& a, \
+void MatVecProd(const Array<float>& a, \
     const Array<float>& b, const bool enblMKL, Array<float>& c);
 
 // INTRO
-//   compute the product between two matrices
+//   compute the product between two dense matrices
 // INPUT
 //   a: m x k
 //   b: n x k
@@ -37,6 +37,28 @@ void VecMatProd(const Array<float>& a, \
 // OUTPUT
 //   c: m x n (= a * b')
 void MatMatProd(const Array<float>& a, \
+    const Array<float>& b, const bool enblMKL, Array<float>& c);
+
+// INTRO
+//   compute the product between a sparse matrix and a dense vector
+// INPUT
+//   a: m x k
+//   b: k x 1
+//   enblMKL: true (use MKL) / false (use built-in)
+// OUTPUT
+//   c: m x 1 (= a * b)
+void SprsMatVecProd(const SprsArray<float>& a, \
+    const Array<float>& b, const bool enblMKL, Array<float>& c);
+
+// INTRO
+//   compute the product between a sparse matrix and a dense matrix
+// INPUT
+//   a: m x k
+//   b: k x n
+//   enblMKL: true (use MKL) / false (use built-in)
+// OUTPUT
+//   c: m x n (= a * b)
+void SprsMatMatProd(const SprsArray<float>& a, \
     const Array<float>& b, const bool enblMKL, Array<float>& c);
 
 #endif // BLASWRAPPER_H_INCLUDED
