@@ -53,6 +53,10 @@ private:
 
 template<typename Dtype>
 Array<Dtype>::Array(const ArraySiz& siz) {
+  // set the pointer to <NULL>
+  pData_ = NULL;
+
+  // call <Create> function for array generation
   Create(siz);
 }
 
@@ -68,6 +72,10 @@ void Array<Dtype>::Create(const ArraySiz& siz) {
   for (std::size_t idx = 0; idx < siz_.size(); ++idx) {
     eleCnt_ *= siz_[idx];
   } // ENDFOR: idx
+  if (pData_ != NULL) {
+    delete[] pData_;
+    pData_ = NULL;
+  } // ENDIF: pData_
   pData_ = new Dtype[eleCnt_];
 }
 
