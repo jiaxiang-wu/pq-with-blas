@@ -40,11 +40,6 @@ void VecMatProd(const Array<float>& a, \
     for (std::size_t im = 0; im < m; ++im) {
       const float* pa = a.GetDataPtr() + im * k;
       pc[im] = CalcInPd(pa, pb, k);
-      //float val = 0.0;
-      //for (std::size_t ik = 0; ik < k; ++ik) {
-      //  val += pa[ik] * pb[ik];
-      //} // ENDFOR: ik
-      //pc[im] = val;
     } // ENDFOR: im
   } // ENDIF: enblMKL
 }
@@ -79,11 +74,6 @@ void MatMatProd(const Array<float>& a, \
       for (std::size_t in = 0; in < n; ++in) {
         const float* pb = b.GetDataPtr() + in * k;
         pc[in] = CalcInPd(pa, pb, k);
-        //float val = 0.0;
-        //for (std::size_t ik = 0; ik < k; ++ik) {
-        //  val += pa[ik] * pb[ik];
-        //} // ENDFOR: ik
-        //pc[in] = val;
       } // ENDFOR: in
     } // ENDFOR: im
   } // ENDIF: enblMKL
