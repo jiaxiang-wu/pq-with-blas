@@ -134,8 +134,8 @@ void OptProdQuan::MsrMulTime(const bool enblMKL) {
         float* pDst = quryDcpMul_[scbkIdx].GetDataPtr() \
             + btchIdx * featCntPrjPerScbk_;
         memcpy(pDst, pSrc, sizeof(float) * featCntPrjPerScbk_);
-      }
-    } // ENDFOR: quryIdx
+      } // ENDFOR: sckbIdx
+    } // ENDFOR: btchIdx
 
     // pre-compute the inner products
     for (std::size_t scbkIdx = 0; scbkIdx < param_.scbkCnt_; ++scbkIdx) {
