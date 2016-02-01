@@ -126,9 +126,9 @@ void Array<Dtype>::Resize(const ArraySiz& siz) {
 
 template<typename Dtype>
 void Array<Dtype>::DispSiz(void) const {
-  std::cout << "# of elements: " << eleCnt_ << std::endl;
+  std::cout << "[INFO] # of elements: " << eleCnt_ << std::endl;
   for (std::size_t idx = 0; idx < siz_.size(); ++idx) {
-    std::cout << "Dim #" << idx << ": " << siz_[idx] << std::endl;
+    std::cout << "[INFO] Dim #" << idx << ": " << siz_[idx] << std::endl;
   } // ENDFOR: idx
 }
 
