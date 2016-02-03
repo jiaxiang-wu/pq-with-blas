@@ -11,6 +11,8 @@
 #include "ProdQuan.h"
 #include "OptProdQuan.h"
 #include "CompQuan.h"
+#include "SprsCompQuan.h"
+
 #include "StopWatch.hpp"
 
 // define constant variables

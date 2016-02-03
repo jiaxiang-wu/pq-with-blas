@@ -79,16 +79,14 @@ void MatMatProd(const Array<float>& a, \
   } // ENDIF: enblMKL
 }
 
-// TODO
 void SprsMatVecProd(const SprsArray<float>& a, \
     const Array<float>& b, const bool enblMKL, Array<float>& c) {
-  /*
   // obtain basic variables
-  std::size_t m = a.GetDimLen(0);
-  std::size_t k = a.GetDimLen(1);
+  std::size_t m = a.GetRowCnt();
+  std::size_t k = a.GetColCnt();
 
   // verify the input/output arrays' size
-  if ((b.GetDimLen(0) != 1) || (b.GetDimLen(1) != k)) {
+  if ((b.GetDimLen(0) != k) || (b.GetDimLen(1) != 1)) {
     std::cout << "[ERROR] invalid input array(s)" << std::endl;
     exit(-1);
   } // ENDIF: b
@@ -100,9 +98,23 @@ void SprsMatVecProd(const SprsArray<float>& a, \
   // compute the product between a dense matrix and a dense vector
   if (enblMKL) {
     // use MKL implementation
-    cblas_sgemv(CblasRowMajor, CblasNoTrans, m, k, 1.0, \
-        a.GetDataPtr(), k, b.GetDataPtr(), 1, 0.0, c.GetDataPtr(), 1);
+    char transa = 'n';
+    MKL_INT m_mkl = m;
+    MKL_INT k_mkl = k;
+    float alpha = 1.0;
+    char matdescra[] = "G__C";
+    float* val = a.GetVal();
+    MKL_INT* idx = a.GetIdx();
+    MKL_INT* ptrb = a.GetPtrb();
+    MKL_INT* ptre = a.GetPtre();
+    float* x = b.GetDataPtr();
+    float beta = 0.0;
+    float* y = c.GetDataPtr();
+    mkl_scsrmv(&transa, &m_mkl, &k_mkl, &alpha, \
+        matdescra, val, idx, ptrb, ptre, x, &beta, y);
   } else {
+    // TODO
+    /*
     // use built-in implementaion
     const float* pb = b.GetDataPtr();
     float* pc = c.GetDataPtr();
@@ -110,17 +122,15 @@ void SprsMatVecProd(const SprsArray<float>& a, \
       const float* pa = a.GetDataPtr() + im * k;
       pc[im] = CalcInPd(pa, pb, k);
     } // ENDFOR: im
+    */
   } // ENDIF: enblMKL
-  */
 }
 
-// TODO
 void SprsMatMatProd(const SprsArray<float>& a, \
     const Array<float>& b, const bool enblMKL, Array<float>& c) {
-  /*
   // obtain basic variables
-  std::size_t m = a.GetDimLen(0);
-  std::size_t k = a.GetDimLen(1);
+  std::size_t m = a.GetRowCnt();
+  std::size_t k = a.GetColCnt();
   std::size_t n = b.GetDimLen(0);
 
   // verify the input/output arrays' size
@@ -136,9 +146,26 @@ void SprsMatMatProd(const SprsArray<float>& a, \
   // compute the product between two dense matrices
   if (enblMKL) {
     // use MKL implementation
-    cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasTrans, m, n, k, 1.0, \
-        a.GetDataPtr(), k, b.GetDataPtr(), k, 0.0, c.GetDataPtr(), n);
+    char transa = 'n';
+    MKL_INT m_mkl = m;
+    MKL_INT n_mkl = n;
+    MKL_INT k_mkl = k;
+    float alpha = 1.0;
+    char matdescra[] = "G__C";
+    float* val = a.GetVal();
+    MKL_INT* idx = a.GetIdx();
+    MKL_INT* ptrb = a.GetPtrb();
+    MKL_INT* ptre = a.GetPtre();
+    float* b_mkl = b.GetDataPtr();
+    MKL_INT ldb = k;
+    float beta = 0.0;
+    float* c_mkl = c.GetDataPtr();
+    MKL_INT ldc = n;
+    mkl_scsrmm(&transa, &m_mkl, &n_mkl, &k_mkl, &alpha, \
+        matdescra, val, idx, ptrb, ptre, b_mkl, &ldb, &beta, c_mkl, &ldc);
   } else {
+    // TODO
+    /*
     // use built-in implementaion
     for (std::size_t im = 0; im < m; ++im) {
       const float* pa = a.GetDataPtr() + im * k;
@@ -148,8 +175,8 @@ void SprsMatMatProd(const SprsArray<float>& a, \
         pc[in] = CalcInPd(pa, pb, k);
       } // ENDFOR: in
     } // ENDFOR: im
+    */
   } // ENDIF: enblMKL
-  */
 }
 
 float CalcInPdVal(const float* pa, const float* pb, const std::size_t len) {
