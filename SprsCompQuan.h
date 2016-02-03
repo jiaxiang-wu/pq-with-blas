@@ -13,7 +13,7 @@
 class SprsCompQuanParam : public BaseQuanParam {
 public:
   SprsCompQuanParam(void) {}
-  SprsCompQuanParam(const BaseQuanParam& param);
+  SprsCompQuanParam(const BaseQuanParam& param, const float sprsRat);
 
 public:
   // the sparsity ratio
@@ -23,7 +23,7 @@ public:
 class SprsCompQuan: public BaseQuan {
 public:
   // set-up SCQ's parameters
-  void SetParam(const CompQuanParam& param);
+  void SetParam(const SprsCompQuanParam& param);
   // fill-up essential arrays with random number
   void Fillup(void);
   // measure the time consumption of processing a single query
@@ -34,7 +34,9 @@ public:
 private:
   // SCQ's parameters
   SprsCompQuanParam param_;
+  // the sparse version of sub-codebooks
+  std::vector<SprsArray<float> > sprsScbkLst_;
 };
 
-#define SPRSCOMPQUAN_H_INCLUDED
+#endif // SPRSCOMPQUAN_H_INCLUDED
 

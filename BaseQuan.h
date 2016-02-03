@@ -11,6 +11,7 @@
 #include <vector>
 
 #include "Array.hpp"
+#include "SprsArray.hpp"
 
 class BaseQuanParam {
 public:

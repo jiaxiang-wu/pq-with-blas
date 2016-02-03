@@ -131,10 +131,10 @@ void SprsMatMatProd(const SprsArray<float>& a, \
   // obtain basic variables
   std::size_t m = a.GetRowCnt();
   std::size_t k = a.GetColCnt();
-  std::size_t n = b.GetDimLen(0);
+  std::size_t n = b.GetDimLen(1);
 
   // verify the input/output arrays' size
-  if (b.GetDimLen(1) != k) {
+  if (b.GetDimLen(0) != k) {
     std::cout << "[ERROR] invalid input array(s)" << std::endl;
     exit(-1);
   } // ENDIF: b

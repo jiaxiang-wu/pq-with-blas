@@ -12,6 +12,8 @@
 
 #include "Array.hpp"
 
+#define ABS(x) ((x) > 0 ? (x) : -(x))
+
 const float kEpsilon = 0.000001;
 
 template<typename Dtype>

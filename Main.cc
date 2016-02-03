@@ -52,6 +52,7 @@ int main(int argc, char* argv[]) {
   EvaProdQuan(bqParam);
   EvaOptProdQuan(bqParam);
   EvaCompQuan(bqParam);
+  EvaSprsCompQuan(bqParam);
 
   return 0;
 }
@@ -94,6 +95,19 @@ void EvaCompQuan(const BaseQuanParam& bqParam) {
 
   // call the general evaluation function
   EvaGnrlQuan(compQuanObj);
+}
+
+void EvaSprsCompQuan(const BaseQuanParam& bqParam) {
+  // declare objects
+  SprsCompQuan sprsCompQuanObj;
+
+  // set-up CQ's parameters
+  SprsCompQuanParam param(bqParam, kSprsRat);
+  sprsCompQuanObj.SetParam(param);
+  sprsCompQuanObj.Fillup();
+
+  // call the general evaluation function
+  EvaGnrlQuan(sprsCompQuanObj);
 }
 
 template<class GnrlQuan>
