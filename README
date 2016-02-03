@@ -34,7 +34,7 @@ This project aims at comparing the wall-time consumption of the pre-computation
 | CQ  (IntelMKL) |   0.056 |   0.019 |   0.321 |   0.137 |
 ----------------------------------------------------------
 | SCQ (built-in) |     n/a |     n/a |     n/a |     n/a |
-| SCQ (IntelMKL) |     n/a |     n/a |     n/a |     n/a |
+| SCQ (IntelMKL) |   0.053 |   0.013 |   0.173 |   0.113 |
 ----------------------------------------------------------
 | TQ  (built-in) |     n/a |     n/a |     n/a |     n/a |
 | TQ  (IntelMKL) |     n/a |     n/a |     n/a |     n/a |

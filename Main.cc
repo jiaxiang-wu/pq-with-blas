@@ -16,7 +16,7 @@
 #include "StopWatch.hpp"
 
 // define constant variables
-const std::size_t kFeatCnt = 128;
+const std::size_t kFeatCnt = 960;
 const std::size_t kScbkCnt = 8;
 const std::size_t kScwdCnt = 256;
 const std::size_t kQuryCnt = 10000;
