@@ -113,16 +113,20 @@ void SprsMatVecProd(const SprsArray<float>& a, \
     mkl_scsrmv(&transa, &m_mkl, &k_mkl, &alpha, \
         matdescra, val, idx, ptrb, ptre, x, &beta, y);
   } else {
-    // TODO
-    /*
     // use built-in implementaion
+    const float* val = a.GetVal();
+    const MKL_INT* idx = a.GetIdx();
+    const MKL_INT* ptrb = a.GetPtrb();
+    const MKL_INT* ptre = a.GetPtre();
     const float* pb = b.GetDataPtr();
     float* pc = c.GetDataPtr();
     for (std::size_t im = 0; im < m; ++im) {
-      const float* pa = a.GetDataPtr() + im * k;
-      pc[im] = CalcInPd(pa, pb, k);
+      float valCur = 0.0;
+      for (MKL_INT eleIdx = ptrb[im]; eleIdx < ptre[im]; ++eleIdx) {
+        valCur += val[eleIdx] * pb[idx[eleIdx]];
+      } // ENDFOR: eleIdx
+      pc[im] = valCur;
     } // ENDFOR: im
-    */
   } // ENDIF: enblMKL
 }
 
@@ -164,15 +168,32 @@ void SprsMatMatProd(const SprsArray<float>& a, \
     mkl_scsrmm(&transa, &m_mkl, &n_mkl, &k_mkl, &alpha, \
         matdescra, val, idx, ptrb, ptre, b_mkl, &ldb, &beta, c_mkl, &ldc);
   } else {
-    // TODO
-    /*
     // use built-in implementaion
+    const float* val = a.GetVal();
+    const MKL_INT* idx = a.GetIdx();
+    const MKL_INT* ptrb = a.GetPtrb();
+    const MKL_INT* ptre = a.GetPtre();
+    float* pc = c.GetDataPtr();
+    for (std::size_t in = 0; in < n; ++in) {
+      for (std::size_t im = 0; im < m; ++im) {
+        const float* pb = b.GetDataPtr() + in * k;
+        float valCur = 0.0;
+        for (MKL_INT eleIdx = ptrb[im]; eleIdx < ptre[im]; ++eleIdx) {
+          valCur += val[eleIdx] * pb[idx[eleIdx]];
+        } // ENDFOR: eleIdx
+        pc[im * n + in] = valCur;
+      } // ENDFOR im
+    } // ENDFOR: in
+    /*
     for (std::size_t im = 0; im < m; ++im) {
-      const float* pa = a.GetDataPtr() + im * k;
       float* pc = c.GetDataPtr() + im * n;
       for (std::size_t in = 0; in < n; ++in) {
         const float* pb = b.GetDataPtr() + in * k;
-        pc[in] = CalcInPd(pa, pb, k);
+        float valCur = 0.0;
+        for (MKL_INT eleIdx = ptrb[im]; eleIdx < ptre[im]; ++eleIdx) {
+          valCur += val[eleIdx] * pb[idx[eleIdx]];
+        } // ENDFOR: eleIdx
+        pc[in] = valCur;
       } // ENDFOR: in
     } // ENDFOR: im
     */
