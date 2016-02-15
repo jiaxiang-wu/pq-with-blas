@@ -12,6 +12,7 @@
 #include "OptProdQuan.h"
 #include "CompQuan.h"
 #include "SprsCompQuan.h"
+#include "TreeQuan.h"
 
 #include "StopWatch.hpp"
 
@@ -53,6 +54,7 @@ int main(int argc, char* argv[]) {
   EvaOptProdQuan(bqParam);
   EvaCompQuan(bqParam);
   EvaSprsCompQuan(bqParam);
+  EvaTreeQuan(bqParam);
 
   return 0;
 }
@@ -108,6 +110,19 @@ void EvaSprsCompQuan(const BaseQuanParam& bqParam) {
 
   // call the general evaluation function
   EvaGnrlQuan(sprsCompQuanObj);
+}
+
+void EvaTreeQuan(const BaseQuanParam& bqParam) {
+  // declare objects
+  TreeQuan treeQuanObj;
+
+  // set-up TQ's parameters
+  TreeQuanParam param(bqParam);
+  treeQuanObj.SetParam(param);
+  treeQuanObj.Fillup();
+
+  // call the general evaluation function
+  EvaGnrlQuan(treeQuanObj);
 }
 
 template<class GnrlQuan>

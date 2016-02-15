@@ -31,7 +31,7 @@ void SprsCompQuan::SetParam(const SprsCompQuanParam& param) {
   // display the greeting message
   std::cout << "[INFO] entering SprsCompQuan::SetParam()" << std::endl;
 
-  // set-up PQ's parameters
+  // set-up SCQ's parameters
   param_ = param;
 
   // display all parameters

@@ -25,7 +25,7 @@ void CompQuan::SetParam(const CompQuanParam& param) {
   // display the greeting message
   std::cout << "[INFO] entering CompQuan::SetParam()" << std::endl;
 
-  // set-up PQ's parameters
+  // set-up CQ's parameters
   param_ = param;
 
   // display all parameters
