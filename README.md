@@ -37,16 +37,25 @@ We report the pre-computation time (in millisecond) of each query (average over
 | Query Size     |  128 x 1 | 128 x 50 |  960 x 1 | 960 x 50 |
 |:---------------|---------:|---------:|---------:|---------:|
 | PQ  (built-in) |    0.025 |    0.025 |    0.249 |    0.233 |
-| PQ  (IntelMKL) |    0.015 |    0.004 |    0.048 |    0.017 |
+| PQ  (MKL)      |    0.015 |    0.004 |    0.048 |    0.017 |
 | OPQ (built-in) |    0.043 |    0.041 |    1.191 |    1.201 |
-| OPQ (IntelMKL) |    0.017 |    0.005 |    0.182 |    0.074 |
+| OPQ (MKL)      |    0.017 |    0.005 |    0.182 |    0.074 |
 | CQ  (built-in) |    0.270 |    0.252 |    2.043 |    2.029 |
-| CQ  (IntelMKL) |    0.050 |    0.019 |    0.306 |    0.131 |
+| CQ  (MKL)      |    0.050 |    0.019 |    0.306 |    0.131 |
 | SCQ (built-in) |    0.049 |    0.048 |    0.273 |    0.270 |
-| SCQ (IntelMKL) |    0.053 |    0.014 |    0.172 |    0.111 |
+| SCQ (MKL)      |    0.053 |    0.014 |    0.172 |    0.111 |
 | TQ  (built-in) |    0.028 |    0.028 |    0.244 |    0.237 |
-| TQ  (IntelMKL) |    0.015 |    0.004 |    0.054 |    0.020 |
+| TQ  (MKL)      |    0.015 |    0.004 |    0.054 |    0.020 |
 
+Note: for query size M x N, M is the number of feature dimensions, and N is the 
+  number of queries in each input batch. The sparsity in SCQ and TQ is chosen so
+  that the computation complexity is the same as PQ.
 
 ## Analysis
+
++ MKL's BLAS routine is much more powerful than the built-in implementation, and
+  its advantage grows as the input batch size increases.
++ MKL's SparseBLAS routine is also slightly better than the built-in version, 
+  but less efficient than the BLAS routine (comparing PQ and SCQ).
++ TQ is more efficient than SCQ due to its structured sparsity.
 
