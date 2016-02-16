@@ -21,10 +21,16 @@ public:
 
 class DimConvParam {
 public:
+  // initialize the dimension conversion parameters
+  void Init(const std::size_t featCnt, const std::size_t scbkCnt);
+
+public:
   // the index list of each feature dimension's sub-codebook
-  std::vector<std::size_t> scbkIdxLst_;
+  std::vector<std::size_t> scbkIdxLstPri_;
+  std::vector<std::size_t> scbkIdxLstSec_;
   // the index list of each feature dimension's insertion position
-  std::vector<std::size_t> instIdxLst_;
+  std::vector<std::size_t> instIdxLstPri_;
+  std::vector<std::size_t> instIdxLstSec_;
   // the length of each sub-codebook (number of feature dimensions)
   std::vector<std::size_t> scbkLenLst_;
 };

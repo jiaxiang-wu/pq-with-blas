@@ -21,12 +21,42 @@ TreeQuanParam::TreeQuanParam(const BaseQuanParam& param) {
   btchSiz_ = param.btchSiz_;
 }
 
+void DimConvParam::Init(const std::size_t featCnt, const std::size_t scbkCnt) {
+  // pre-allocate space for vectors
+  scbkIdxLstPri_.resize(featCnt);
+  scbkIdxLstSec_.resize(featCnt);
+  instIdxLstPri_.resize(featCnt);
+  instIdxLstSec_.resize(featCnt);
+  scbkLenLst_.clear();
+  scbkLenLst_.resize(scbkCnt, 0);
+
+  // randomly determine the feature dimension's assignment
+  for (std::size_t featIdx = 0; featIdx < featCnt; ++featIdx) {
+    while (true) {
+      std::size_t scbkIdxPri = rand() % scbkCnt;
+      std::size_t scbkIdxSec = rand() % scbkCnt;
+      if (scbkIdxPri == scbkIdxSec) {
+        continue;
+      } else {
+        scbkIdxLstPri_[featIdx] = scbkIdxPri;
+        scbkIdxLstSec_[featIdx] = scbkIdxSec;
+        instIdxLstPri_[featIdx] = scbkLenLst_[scbkIdxPri];
+        instIdxLstSec_[featIdx] = scbkLenLst_[scbkIdxSec];
+        scbkLenLst_[scbkIdxPri]++;
+        scbkLenLst_[scbkIdxSec]++;
+        break;
+      } // ENDIF: scbkIdxPri
+    } // ENDWHILE: true
+  } // ENDFOR: featIdx
+}
+
 void TreeQuan::SetParam(const TreeQuanParam& param) {
   // display the greeting message
   std::cout << "[INFO] entering TreeQuan::SetParam()" << std::endl;
 
   // set-up TQ's parameters
   param_ = param;
+  dimConvParam_.Init(param_.featCnt_, param_.scbkCnt_);
 
   // display all parameters
   std::cout << "[INFO] featCnt = " << param_.featCnt_ << std::endl;
@@ -39,19 +69,6 @@ void TreeQuan::SetParam(const TreeQuanParam& param) {
 void TreeQuan::Fillup(void) {
   // display the greeting message
   std::cout << "[INFO] entering TreeQuan::Fillup()" << std::endl;
-
-  // randomly determine the feature dimension assignments
-  dimConvParam_.scbkIdxLst_.resize(param_.featCnt_);
-  dimConvParam_.instIdxLst_.resize(param_.featCnt_);
-  dimConvParam_.scbkLenLst_.clear();
-  dimConvParam_.scbkLenLst_.resize(param_.scbkCnt_, 0);
-  for (std::size_t featIdx = 0; featIdx < param_.featCnt_; ++featIdx) {
-    std::size_t scbkIdx = rand() % param_.scbkCnt_;
-    std::size_t scbkLen = dimConvParam_.scbkLenLst_[scbkIdx];
-    dimConvParam_.scbkIdxLst_[featIdx] = scbkIdx;
-    dimConvParam_.instIdxLst_[featIdx] = scbkLen;
-    dimConvParam_.scbkLenLst_[scbkIdx] = scbkLen + 1;
-  } // ENDFOR: featIdx
 
   // compute the size of each array
   quryOrgSngSiz_.resize(2);
@@ -104,11 +121,15 @@ void TreeQuan::MsrSngTime(const bool enblMKL) {
   for (std::size_t reptIdx = 0; reptIdx < reptCnt; ++reptIdx) {
     // split the query vector into sub-query vectors
     for (std::size_t featIdx = 0; featIdx < param_.featCnt_; ++featIdx) {
-      std::size_t scbkIdx = dimConvParam_.scbkIdxLst_[featIdx];
-      std::size_t instIdx = dimConvParam_.instIdxLst_[featIdx];
+      std::size_t scbkIdxPri = dimConvParam_.scbkIdxLstPri_[featIdx];
+      std::size_t scbkIdxSec = dimConvParam_.scbkIdxLstSec_[featIdx];
+      std::size_t instIdxPri = dimConvParam_.instIdxLstPri_[featIdx];
+      std::size_t instIdxSec = dimConvParam_.instIdxLstSec_[featIdx];
       const float* pSrc = quryOrgSng_.GetDataPtr() + featIdx;
-      float* pDst = quryDcpSng_[scbkIdx].GetDataPtr() + instIdx;
-      *pDst = *pSrc;
+      float* pDstPri = quryDcpSng_[scbkIdxPri].GetDataPtr() + instIdxPri;
+      float* pDstSec = quryDcpSng_[scbkIdxSec].GetDataPtr() + instIdxSec;
+      *pDstPri = *pSrc;
+      *pDstSec = *pSrc;
     } // ENDFOR: featIdx
 
     // pre-compute the inner products
@@ -129,14 +150,20 @@ void TreeQuan::MsrMulTime(const bool enblMKL) {
     // split the query vectors into sub-query vectors
     for (std::size_t btchIdx = 0; btchIdx < param_.btchSiz_; ++btchIdx) {
       for (std::size_t featIdx = 0; featIdx < param_.featCnt_; ++featIdx) {
-        std::size_t scbkIdx = dimConvParam_.scbkIdxLst_[featIdx];
-        std::size_t instIdx = dimConvParam_.instIdxLst_[featIdx];
-        std::size_t scbkLen = dimConvParam_.scbkLenLst_[scbkIdx];
+        std::size_t scbkIdxPri = dimConvParam_.scbkIdxLstPri_[featIdx];
+        std::size_t scbkIdxSec = dimConvParam_.scbkIdxLstSec_[featIdx];
+        std::size_t instIdxPri = dimConvParam_.instIdxLstPri_[featIdx];
+        std::size_t instIdxSec = dimConvParam_.instIdxLstSec_[featIdx];
+        std::size_t scbkLenPri = dimConvParam_.scbkLenLst_[scbkIdxPri];
+        std::size_t scbkLenSec = dimConvParam_.scbkLenLst_[scbkIdxSec];
         const float* pSrc = quryOrgMul_.GetDataPtr() \
             + btchIdx * param_.featCnt_ + featIdx;
-        float* pDst = quryDcpMul_[scbkIdx].GetDataPtr() \
-            + btchIdx * scbkLen + instIdx;
-        *pDst = *pSrc;
+        float* pDstPri = quryDcpMul_[scbkIdxPri].GetDataPtr() \
+            + btchIdx * scbkLenPri + instIdxPri;
+        float* pDstSec = quryDcpMul_[scbkIdxSec].GetDataPtr() \
+            + btchIdx * scbkLenSec + instIdxSec;
+        *pDstPri = *pSrc;
+        *pDstSec = *pSrc;
       } // ENDFOR: featIdx
     } // ENDFOR: btchIdx
 
