@@ -51,7 +51,7 @@ Note: for query size X x Y, X is the number of feature dimensions, and Y is the
   number of queries in each input batch. We choose SCQ's sparsity so that its 
   complexity is the same as that of PQ.
 
-## Analysis
+# Analysis
 
 + MKL's BLAS routine is much more powerful than the built-in implementation, and
   its advantage grows as the input batch size increases.
